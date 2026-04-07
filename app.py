@@ -3,9 +3,9 @@ import psycopg2
 
 app = Flask(__name__)
 
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
+# @app.route('/')
+# def hello_world():
+#    return 'Hello, World!'
 
 
 @app. route('/db_test')
