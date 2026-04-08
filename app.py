@@ -14,16 +14,16 @@ def hello_world():
 @app.route('/db_test')
 def testing():
     conn = psycopg2.connect(URL)
-    conn. close()
+    conn.close()
     return "Print: Database connection successful"
 
 
 
 # Create DB
-@app.route ('/db_create')
+@app.route('/db_create')
 def creating():
     conn = psycopg2.connect(URL)
-    cur = conn. cursor()
+    cur = conn.cursor()
     cur.execute('''
         CREATE TABLE IF NOT EXISTS basketball (
             First VARCHAR(255),
@@ -33,8 +33,8 @@ def creating():
             Number INT
             );
     ''')
-    conn.commit ()
-    conn. close ()
+    conn.commit()
+    conn.close()
     return "Print: Basketball table successfully created"
 
 
@@ -42,7 +42,7 @@ def creating():
 @app.route('/db_insert')
 def creating():
     conn = psycopg2.connect(URL)
-    cur = conn. cursor()
+    cur = conn.cursor()
     cur.execute('''
         INSERT INTO basketball (First, Last, City, Name, Number)
             VALUES
@@ -51,8 +51,8 @@ def creating():
             ('Nikola', 'Jokic', 'Denver', 'Nuggets', 15),
             ('Kawhi', 'Leonard', 'Los Angeles', 'Clippers', 2);
     ''')
-    conn.commit ()
-    conn. close ()
+    conn.commit()
+    conn.close()
     return "Print: Basketball table successfully updated"
 
 
@@ -60,7 +60,7 @@ def creating():
 @app.route('/db_select')
 def selecting():
     conn = psycopg2.connect(URL)
-    cur = conn. cursor()
+    cur = conn.cursor()
     cur.execute('''
         SELECT *
         FROM basketball;
