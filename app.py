@@ -39,7 +39,7 @@ def creating():
 
 
 # Add data to DB
-@app. route ('/db_insert')
+@app.route('/db_insert')
 def creating():
     conn = psycopg2.connect(URL)
     cur = conn. cursor()
