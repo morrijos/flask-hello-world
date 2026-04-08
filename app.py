@@ -11,7 +11,7 @@ def hello_world():
 
 
 # Connect to Postgres instance
-@app. route('/db_test')
+@app.route('/db_test')
 def testing():
     conn = psycopg2.connect(URL)
     conn. close()
@@ -20,7 +20,7 @@ def testing():
 
 
 # Create DB
-@app. route ('/db_create')
+@app.route ('/db_create')
 def creating():
     conn = psycopg2.connect(URL)
     cur = conn. cursor()
