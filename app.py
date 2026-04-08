@@ -3,76 +3,93 @@ import psycopg2
 
 app = Flask(__name__)
 
-URL = "postgresql://my_postgresql_6c81_user:EBU4t7ahZIXXQPdDtwy2BgJBvYF9X6zG@dpg-d7a70ufpm1nc73bvaqsg-a/my_postgresql_6c81"
+# Render PostgreSQL Internal Database URL
+url = "postgresql://my_postgresql_6c81_user:EBU4t7ahZIXXQPdDtwy2BgJBvYF9X6zG@dpg-d7a70ufpm1nc73bvaqsg-a/my_postgresql_6c81"
 
+
+# Hello World
 @app.route('/')
-def hello_world():
-    return 'Hello, World!'
+def home():
+    return "Hello, World!"
 
 
-# Connect to Postgres instance
+# Database connection
 @app.route('/db_test')
-def testing():
-    conn = psycopg2.connect(URL)
+def db_test():
+    conn = psycopg2.connect(url)
     conn.close()
-    return "Print: Database connection successful"
+    return "DB: Connection successful"
 
 
-
-# Create DB
+# Create basketball table
 @app.route('/db_create')
-def creating():
-    conn = psycopg2.connect(URL)
+def db_create():
+    conn = psycopg2.connect(url)
     cur = conn.cursor()
     cur.execute('''
-        CREATE TABLE IF NOT EXISTS basketball (
-            First VARCHAR(255),
-            Last VARCHAR(255),
-            City VARCHAR(255),
-            Name VARCHAR(255),
-            Number INT
-            );
+        CREATE TABLE IF NOT EXISTS basketball(
+            first VARCHAR(255),
+            last VARCHAR(255),
+            city VARCHAR(255),
+            name VARCHAR(255),
+            number INT
+        );
     ''')
     conn.commit()
     conn.close()
-    return "Print: Basketball table successfully created"
+    return "DB: Created basketball table"
 
 
-# Add data to DB
+# Insert data into basketball table
 @app.route('/db_insert')
-def creating():
-    conn = psycopg2.connect(URL)
+def db_insert():
+    conn = psycopg2.connect(url)
     cur = conn.cursor()
     cur.execute('''
-        INSERT INTO basketball (First, Last, City, Name, Number)
-            VALUES
-            ('Jayson', 'Tatum', 'Boston', 'Celtics', 0),
-            ('Stephen', 'Curry', 'San Francisco', 'Warriors', 30),
-            ('Nikola', 'Jokic', 'Denver', 'Nuggets', 15),
-            ('Kawhi', 'Leonard', 'Los Angeles', 'Clippers', 2);
+        INSERT INTO basketball (first, last, city, name, number)
+        VALUES
+        ('Jayson', 'Tatum', 'Boston', 'Celtics', 0),
+        ('Stephen', 'Curry', 'San Francisco', 'Warriors', 30),
+        ('Nikola', 'Jokic', 'Denver', 'Nuggets', 15),
+        ('Kawhi', 'Leonard', 'Los Angeles', 'Clippers', 2);
     ''')
     conn.commit()
     conn.close()
-    return "Print: Basketball table successfully updated"
+    return "DB: Inserted values into basketball table"
 
 
-# Select data from DB
+# Select from basketball table
 @app.route('/db_select')
-def selecting():
-    conn = psycopg2.connect(URL)
+def db_select():
+    conn = psycopg2.connect(url)
     cur = conn.cursor()
     cur.execute('''
-        SELECT *
-        FROM basketball;
-    ''')
+        SELECT * 
+        FROM basketball;''')
     records = cur.fetchall()
-    conn.close() 
-    response_string="" 
-    response_string+="<table>"
-    for player in records: 
-        response_string+="<tr>"
-        for info in player:
-            response_string+="<td>{}</td>".format(info) 
-        response_string+="</tr>" 
+    conn.close()
+    response_string="" response_string+="<table>"
+        for player in records: response_string+="<tr>"
+            for info in player:
+                response_string+="<td>{}</td>".format(info) 
+            response_string+="</tr>" 
     response_string+="</table>"
     return response_string
+
+
+# Drop basketball table
+@app.route('/db_drop')
+def db_drop():
+    conn = psycopg2.connect(url)
+    cur = conn.cursor()
+    cur.execute('''
+        DROP TABLE basketball;
+    ''')
+    conn.commit()
+    conn.close()
+    return "DB: Dropped basketball table"
+
+
+# Run locally
+if __name__ == '__main__':
+    app.run(debug=True)
